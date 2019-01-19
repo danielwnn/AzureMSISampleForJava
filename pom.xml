@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.springframework</groupId>
+    <artifactId>gs-spring-boot</artifactId>
+    <version>0.1.0</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.5.RELEASE</version>
+    </parent>
+	
+    <properties>
+        <java.version>1.8</java.version>
+		<jar.finalName>app</jar.finalName>
+		<RESOURCEGROUP_NAME>NYC-DOF-Demo-RG</RESOURCEGROUP_NAME>
+		<WEBAPP_NAME>nyc-dof-java-demo</WEBAPP_NAME>
+		<SLOT_NAME>stage</SLOT_NAME>
+		<APP_SERVICE_PLAN_NAME>ServicePlan9424ad8a-55fd-4f9a</APP_SERVICE_PLAN_NAME>
+		<REGION>westus2</REGION>
+    </properties>	
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.microsoft.rest</groupId>
+			<artifactId>client-runtime</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-client-runtime</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-client-authentication</artifactId>
+			<version>1.6.4</version>
+		</dependency>		
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-keyvault</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>7.0.0.jre8</version>
+		</dependency>		
+    </dependencies>
+
+    <build>
+		<finalName>${jar.finalName}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>			
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+                    <skipITs>true</skipITs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<finalName>${jar.finalName}</finalName>                  
+				</configuration>
+			</plugin>      			
+			<plugin>
+				<groupId>com.microsoft.azure</groupId>
+				<artifactId>azure-webapp-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					<deploymentType>jar</deploymentType>
+
+					<!-- configure app to run on port 80, required by App Service -->
+					<appSettings>
+						<property> 
+							<name>JAVA_OPTS</name> 
+							<value>-Dserver.port=80</value> 
+						</property> 
+					</appSettings>
+					
+				   <!-- Deploy Web App to the existing App Service Plan -->
+				   <appServicePlanResourceGroup>${RESOURCEGROUP_NAME}</appServicePlanResourceGroup>
+				   <appServicePlanName>${APP_SERVICE_PLAN_NAME}</appServicePlanName>
+
+					<!-- Web App information -->
+					<resourceGroup>${RESOURCEGROUP_NAME}</resourceGroup>
+					<appName>${WEBAPP_NAME}</appName>
+					<region>${REGION}</region>  
+					
+                    <!-- Deployment Slot Setting -->
+					<deploymentSlotSetting>
+						<name>${SLOT_NAME}</name>
+						<configurationSource>parent</configurationSource>
+					</deploymentSlotSetting>
+					
+					<!-- Java Runtime Stack for Web App on Linux -->
+					<linuxRuntime>jre8</linuxRuntime>
+					<runtime>
+						<os>Linux</os>
+						<javaVersion>jre8</javaVersion>
+					</runtime>
+				</configuration>
+			</plugin>			
+        </plugins>
+    </build>
+
+</project>
