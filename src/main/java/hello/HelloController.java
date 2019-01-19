@@ -30,11 +30,13 @@ public class HelloController {
         SecretBundle secretBundle = keyVaultClient.getSecret("https://nyc-dof-keyvault01.vault.azure.net/", "MySecret");
         String secret = secretBundle.value();
         
+        String message = null;
+        
         // SQL DB
         try { 
             SQLServerDataSource ds = new SQLServerDataSource();
-            ds.setServerName("aad-managed-demo.database.windows.net"); // Replace with your server name
-            ds.setDatabaseName("demo"); // Replace with your database name
+            ds.setServerName("dbserver.database.windows.net"); // Replace with your server name
+            ds.setDatabaseName("demoDb"); // Replace with your database name
             // ds.setAuthentication("ActiveDirectoryIntegrated");
             ds.setAccessToken(credentials.getToken("https://database.windows.net/"));
             ds.setHostNameInCertificate("*.database.windows.net");             
@@ -44,12 +46,12 @@ public class HelloController {
             ResultSet rs = stmt.executeQuery("SELECT SUSER_SNAME()");
             
             if (rs.next()) {
-                System.out.println("You have successfully logged on as: " + rs.getString(1));
+            	message = "Successfully logged on as: " + rs.getString(1);
             }
         } catch (Exception e) {
-        	//
+        	message = e.getMessage();
         }      
 
-        return "Slot: " + slotName + " - Key Vault: MySecret = " + secret;
+        return "Slot: " + slotName + " - Key Vault: MySecret = " + secret + " " + message;
     }    
 }

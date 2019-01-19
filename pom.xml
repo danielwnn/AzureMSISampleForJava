@@ -3,8 +3,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.springframework</groupId>
-    <artifactId>gs-spring-boot</artifactId>
+    <groupId>com.microsoft.azure</groupId>
+    <artifactId>AzureMSIJavaSample</artifactId>
     <version>0.1.0</version>
 
     <parent>
@@ -127,10 +127,12 @@
 					<region>${REGION}</region>  
 					
                     <!-- Deployment Slot Setting -->
+					<!--
 					<deploymentSlotSetting>
 						<name>${SLOT_NAME}</name>
 						<configurationSource>parent</configurationSource>
 					</deploymentSlotSetting>
+					-->
 					
 					<!-- Java Runtime Stack for Web App on Linux -->
 					<linuxRuntime>jre8</linuxRuntime>
